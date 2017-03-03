@@ -34,10 +34,10 @@ class BrightnessConverter: Convert2Android {
     static let min_value: CGFloat = kBrightnessDefines.minValue
     static let max_value: CGFloat = kBrightnessDefines.maxValue
     
-    class func convertValue(ios_value: CGFloat) -> CGFloat {
+    class func convertValueToAndroid(ios_value: CGFloat) -> CGFloat {
         var android_value:CGFloat
         
-        android_value = ios_value
+        android_value = 100.0 * ios_value
         
         print("Converting brightness from ios_value = \(ios_value) to android value = \(android_value).")
         return ios_value;

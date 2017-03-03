@@ -37,17 +37,17 @@ extension ChangeBrightnessByNBrick: CBInstructionProtocol {
         
         return {
             guard let look = object.spriteNode!.currentLook else { return }
-            var brightnessValue = bright.interpretDoubleForSprite(object) / 100
-            brightnessValue += Double(spriteNode.currentLookBrightness)
-            if (brightnessValue > 1) {
-                brightnessValue = 1.0;
+            var brightnessValue = CGFloat(bright.interpretDoubleForSprite(object))
+            brightnessValue += spriteNode.currentLookBrightness
+            if (brightnessValue > BrightnessConverter.max_value) {
+                brightnessValue = BrightnessConverter.max_value;
             }
-            else if (brightnessValue < -1){
-                brightnessValue = -1.0;
+            else if (brightnessValue < BrightnessConverter.min_value){
+                brightnessValue = BrightnessConverter.min_value;
             }
             
             let lookImage = UIImage(contentsOfFile:self.pathForLook(look))
-            let brightnessDefaultValue:CGFloat = 0.0
+            let brightnessDefaultValue:CGFloat = BrightnessConverter.init_value
             spriteNode.currentLookBrightness = CGFloat(brightnessValue)
             
             if (CGFloat(brightnessValue) != brightnessDefaultValue){

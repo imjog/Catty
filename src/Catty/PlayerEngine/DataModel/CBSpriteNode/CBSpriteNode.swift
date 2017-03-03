@@ -37,7 +37,7 @@ final class CBSpriteNode: SKSpriteNode {
         get { return CBSceneHelper.convertSceneCoordinateToPoint(self.position, sceneSize: (scene?.size)!) }
     }
     var zIndex: CGFloat { return zPosition }
-    var brightness: CGFloat { return (100 * self.currentLookBrightness) }
+    var brightness: CGFloat { return self.currentLookBrightness }
     var colorValue: CGFloat { return (self.currentLookColor*100/CGFloat(M_PI)) }
     var scaleX: CGFloat { return (100 * xScale) }
     var scaleY: CGFloat { return (100 * yScale) }
@@ -203,7 +203,7 @@ final class CBSpriteNode: SKSpriteNode {
     func start(zPosition: CGFloat) {
         self.scenePosition = CGPointMake(0, 0)
         self.zRotation = 0
-        self.currentLookBrightness = 0
+        self.currentLookBrightness = BrightnessConverter.init_value
         if self.spriteObject?.isBackground() == true {
             self.zPosition = 0
         } else {

@@ -26,5 +26,5 @@ protocol Convert2Android {
     static var min_value: CGFloat { get }
     static var max_value: CGFloat { get }
     
-    static func convertValue(ios_value: CGFloat) -> CGFloat
+    static func convertValueToAndroid(ios_value: CGFloat) -> CGFloat
 }
