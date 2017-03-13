@@ -39,24 +39,31 @@ extension SetBrightnessBrick: CBInstructionProtocol{
             guard let look = object.spriteNode!.currentLook else { return }
 
             var brightnessValue = bright.interpretDoubleForSprite(object) / 100
-            if (brightnessValue > 2) {
-                brightnessValue = 1.0;
+            print("In " + #function + ": " + #line + ": " + "brightnessValue " + brightnessValue);
+            if (brightnessValue > BrightnessConverter.max_value) {
+                brightnessValue = BrightnessConverter.max_value
+                print("In " + #function + ": " + #line + ": " + "brightness was too high!")
             }
-            else if (brightnessValue < 0){
-                brightnessValue = -1.0;
+            else if (brightnessValue < BrightnessConverter.min_value){
+                brightnessValue = BrightnessConverter.min_value
+                print("In " + #function + ": " + #line + ": " + "brightness was too low!")
             }
             else{
                 brightnessValue -= 1.0;
+                print("In " + #function + ": " + #line + ": " + "changed brightness by -1!")
             }
 
             let lookImage = UIImage(contentsOfFile:self.pathForLook(look))
-            let brightnessDefaultValue:CGFloat = 0.0
+            let brightnessDefaultValue:CGFloat = BrightnessConverter.initValue
+            print("In " + #function + ": " + #line + ": " + "Set brightnessDefaultValue to initValue.");
             spriteNode.currentLookBrightness = CGFloat(brightnessValue)
             
             if (CGFloat(brightnessValue) != brightnessDefaultValue){
                 spriteNode.filterDict["brightness"] = true
+                print("In " + #function + ": " + #line + ": " + "brightness changed!");
             }else{
                 spriteNode.filterDict["brightness"] = false
+                print("In " + #function + ": " + #line + ": " + "brightness did not change!");
             }
             spriteNode.executeFilter(lookImage)
             

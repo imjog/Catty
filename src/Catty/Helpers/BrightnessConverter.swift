@@ -23,16 +23,16 @@
 
 // TODO: Move defines to external file and wrap in sensorDefines struct!
 struct kBrightnessDefines {
-    static let initValue:CGFloat    = 1.0
-    static let minValue:CGFloat     = 0.0
-    static let maxValue:CGFloat     = 1.0
+    static let initValueIntern:CGFloat    = 1.0
+    static let minValueIntern:CGFloat     = 0.0
+    static let maxValueIntern:CGFloat     = 1.0
 }
 
 class BrightnessConverter: Convert2Android {
     
-    static let init_value: CGFloat = kBrightnessDefines.initValue
-    static let min_value: CGFloat = kBrightnessDefines.minValue
-    static let max_value: CGFloat = kBrightnessDefines.maxValue
+    static let init_value: CGFloat = kBrightnessDefines.initValueIntern
+    static let min_value: CGFloat = kBrightnessDefines.minValueIntern
+    static let max_value: CGFloat = kBrightnessDefines.maxValueIntern
     
     class func convertValueToAndroid(ios_value: CGFloat) -> CGFloat {
         var android_value:CGFloat
