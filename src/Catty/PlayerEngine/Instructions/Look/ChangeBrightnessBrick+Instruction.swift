@@ -38,30 +38,31 @@ extension ChangeBrightnessByNBrick: CBInstructionProtocol {
         return {
             guard let look = object.spriteNode!.currentLook else { return }
             var brightnessValue = CGFloat(bright.interpretDoubleForSprite(object))
-            print("In " + #function + ": " + #line + ": " + "brightnessValue = " + brightnessValue);
+            print("In \(#function): \(#line): brightnessValue = \(brightnessValue)")
             brightnessValue += spriteNode.currentLookBrightness
-            print("In " + #function + ": " + #line + ": " + "spriteNode.currentLookBrightness = " + spriteNode.currentLookBrightness);
-            print("In " + #function + ": " + #line + ": " + "brightnessValue = " + brightnessValue);
+            print("In \(#function): \(#line): brightnessValue = \(brightnessValue)")
+            print("In \(#function): \(#line): spriteNode.currentLookBrightness =  = \(spriteNode.currentLookBrightness)")
             if (brightnessValue > BrightnessConverter.max_value) {
                 brightnessValue = BrightnessConverter.max_value;
-                print("In " + #function + ": " + #line + ": " + "brightness was too high!");
+                print("In \(#function): \(#line): brightness was too high!")
             }
             else if (brightnessValue < BrightnessConverter.min_value){
                 brightnessValue = BrightnessConverter.min_value;
-                print("In " + #function + ": " + #line + ": " + "brightness was too low!");
+                print("In \(#function): \(#line): brightness was too low!")
             }
             
             let lookImage = UIImage(contentsOfFile:self.pathForLook(look))
             let brightnessDefaultValue:CGFloat = BrightnessConverter.init_value
-            print("In " + #function + ": " + #line + ": " + "Setting brightnessDefaultValue to " + brightnessDefaultValue:CGFloat);
+            print("In \(#function): \(#line): Setting brightnessDefaultValue to \(BrightnessConverter.init_value)")
+
             spriteNode.currentLookBrightness = CGFloat(brightnessValue)
             
             if (CGFloat(brightnessValue) != brightnessDefaultValue){
                 spriteNode.filterDict["brightness"] = true
-                print("In " + #function + ": " + #line + ": " + "brightness was not default value");
+                print("In \(#function): \(#line): brightness was not default value!")
             }else{
                 spriteNode.filterDict["brightness"] = false
-                print("In " + #function + ": " + #line + ": " + "brightness was default value!");
+                print("In \(#function): \(#line): brightness was default value!")
             }
             spriteNode.executeFilter(lookImage)
             
