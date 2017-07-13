@@ -45,6 +45,7 @@
 #import "UIImageView+CatrobatUIImageViewExtensions.h"
 #import "UIImage+CatrobatUIImageExtensions.h"
 #import "MediaLibraryViewController.h"
+#import "Pocket_Code-Swift.h"
 
 @interface LooksTableViewController () <CatrobatActionSheetDelegate, UIImagePickerControllerDelegate,
                                         UINavigationControllerDelegate, CatrobatAlertViewDelegate,
@@ -794,14 +795,24 @@ static NSCharacterSet *blockedCharacterSet = nil;
         }else if(buttonIndex != 0)
         {
             //media library
-            NSDebug(@"Media library");
+            NSDebug(@"Image library");
             dispatch_async(dispatch_get_main_queue(), ^{
-                MediaLibraryViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:kMediaLibraryViewControllerIdentifier];
-                vc.paintDelegate = self;
                 
-                vc.urlEnding = self.object.isBackground ? @"backgrounds" : @"looks";
-             
+                /*MediaLibraryViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:kMediaLibraryViewControllerIdentifier];
+                vc.paintDelegate = self;
+                vc.urlEnding = self.object.isBackground ? @"backgrounds" : @"looks";*/
+                
+                
+                
+                
+                ImageLibraryCollectionViewController *vc = ((ImageLibraryCollectionViewController*)[self.storyboard instantiateViewControllerWithIdentifier:kImageLibraryCollectionViewControllerIdentifier]);
+                
+                vc.imageType = self.object.isBackground ? @"backgrounds" : @"looks";
+                
+                //vc.delegate = self;
+                
                 [self.navigationController pushViewController:vc animated:YES];
+                
                 
             });
         }else {
