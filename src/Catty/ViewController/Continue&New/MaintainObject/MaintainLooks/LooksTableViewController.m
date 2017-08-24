@@ -798,22 +798,12 @@ static NSCharacterSet *blockedCharacterSet = nil;
             NSDebug(@"Image library");
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                /*MediaLibraryViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:kMediaLibraryViewControllerIdentifier];
-                vc.paintDelegate = self;
-                vc.urlEnding = self.object.isBackground ? @"backgrounds" : @"looks";*/
-                
-                
-                
-                
                 ImageLibraryCollectionViewController *vc = ((ImageLibraryCollectionViewController*)[self.storyboard instantiateViewControllerWithIdentifier:kImageLibraryCollectionViewControllerIdentifier]);
                 
                 vc.imageType = self.object.isBackground ? @"backgrounds" : @"looks";
-                
-                //vc.delegate = self;
+                vc.paintDelegate = self;
                 
                 [self.navigationController pushViewController:vc animated:YES];
-                
-                
             });
         }else {
             if (self.showAddLookActionSheetAtStartForObject || self.showAddLookActionSheetAtStartForScriptEditor) {

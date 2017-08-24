@@ -23,13 +23,15 @@
 
 import UIKit
 
-class ImageLibraryCollectionViewController: UICollectionViewController {
+class ImageLibraryCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
+    @IBOutlet var imageCollectionView: UICollectionView!
     
-    @IBOutlet weak var imageType: NSString?
+    var imageType: NSString?
+    var paintDelegate : PaintDelegate! = nil
     var arrayOfImageData: Array<Dictionary<String, AnyObject> > = []
     var sectionArray:Array<String> = []
-    
+    var numberOfItemsInSection:Array<Int> = []
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -38,7 +40,6 @@ class ImageLibraryCollectionViewController: UICollectionViewController {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-
     
     override func viewWillAppear(animated: Bool) {
     }
@@ -50,35 +51,26 @@ class ImageLibraryCollectionViewController: UICollectionViewController {
     override func viewWillDisappear(animated: Bool) {
         
     }
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if(collectionView == nil)
+        if(imageCollectionView == nil)
         {
-            fatalError("collectionView is nil")
+            print("CollectionView is nil")
         }
-        
-
-        /*let indexPath = NSIndexPath(forItem: 0, inSection: 0)
-        
-        
-        
-        let cell = self.collectionView?.dequeueReusableCellWithReuseIdentifier("ImageCell", forIndexPath: indexPath)*/
         
         var url = NSURL()
         
         if(imageType == "backgrounds") {
-            url = NSURL(string: "https://web-test.catrob.at/pocketcode/api/media/package/Backgrounds/json")!
+            url = NSURL(string: "https://share.catrob.at/pocketcode/api/media/package/Backgrounds/json")!
         }
-        else if (imageType == "sounds") {
-            url = NSURL(string: "https://web-test.catrob.at/pocketcode/api/media/package/Sounds/json")!
+        else if (imageType == "looks") {
+            url = NSURL(string: "https://share.catrob.at/pocketcode/api/media/package/Looks/json")!
         }
         else {
             print("Fatal Error: no image type")
         }
-        
         
         var jsonObject :  NSArray = []
         do {
@@ -86,81 +78,41 @@ class ImageLibraryCollectionViewController: UICollectionViewController {
             do {
                 jsonObject = try NSJSONSerialization.JSONObjectWithData(jsonData, options: .MutableContainers) as! NSArray
             } catch {
-                print("Fatal Error")
+                print("Fatal Error: \(error)")
             }
         } catch {
-            print("Fatal Error")
+            print("Fatal Error: \(error)")
             return;
         }
         
-    
         if jsonObject.count != 0 {
-            /*if let imageCell = cell as? ImageViewCollectionViewCell {
-                imageCell.imageView.image = UIImage(data: data!)
+            arrayOfImageData = jsonObject as! Array<Dictionary<String, AnyObject>>
+            
+            for dict in arrayOfImageData {
+                if sectionArray.count == 0 {
+                    sectionArray.append((dict["category"]) as! String)
+                }
+                else {
+                    if !sectionArray.contains((dict["category"]) as! String) {
+                        sectionArray.append((dict["category"]) as! String)
+                    }
+                }
             }
-            if let array = category as? [AnyObject] {
-                numberOfSections = NSSet(array: array).count
-            }*/
-            
-            //loop for the other objects
-            
-            //change the following lines to fit with ne next line
-            //arrayOfImageData = jsonObject as! Array<Dictionary<String, AnyObject>>
-            
-            //for testing... so only one object is here
-            arrayOfImageData = jsonObject[0] as! Array<Dictionary<String, AnyObject>>
-            
-            
-            /*let dict = jsonObject[0] as! Dictionary<String, AnyObject>
-            let names = dict["name"] as! String
-            let category = dict["category"] as! String
-            let downloadUrl = dict["download_url"] as! String
-            
-            let fullImageUrl = ("https://web-test.catrob.at" + (downloadUrl as? String)!) as! String
-            let fullDownloadUrl = NSURL(string: fullImageUrl)!
-            let data = NSData(contentsOfURL: fullDownloadUrl) for downloading*/
-            }
+        }
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Register cell classes
-        self.collectionView!.registerClass(ImageViewCollectionViewCell.self, forCellWithReuseIdentifier: "ImageCell")
-
-        // Do any additional setup after loading the view.
+        // Register cell class
+        self.imageCollectionView!.registerClass(ImageViewCollectionViewCell.self, forCellWithReuseIdentifier: "ImageCell")
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-    // MARK: UICollectionViewDataSource
-
-    /*override*/ func numberOfSections(in collectionView: UICollectionView) -> Int {
-        
-        
-        for dict in arrayOfImageData {
-            if sectionArray.count != 0 || !sectionArray.contains((dict["category"]) as! String) {
-            sectionArray.append((dict["category"]) as! String)
-            }
-        }
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sectionArray.count
     }
-
-
+    
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
         var numberOfItems:Int = 0
         let category = sectionArray[section]
         for dict in arrayOfImageData {
@@ -171,43 +123,81 @@ class ImageLibraryCollectionViewController: UICollectionViewController {
         return numberOfItems
     }
 
-    /*override func collectionView(collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell
+    {
+        let cell = imageCollectionView.dequeueReusableCellWithReuseIdentifier("ImageCell", forIndexPath: indexPath)
+
+        
+        let imageCell : ImageViewCollectionViewCell = cell as! ImageViewCollectionViewCell
+        if imageCell.contentView.subviews.count != 0 {
+            imageCell.contentView.subviews[0].removeFromSuperview()
+        }
     
         // Configure the cell
+        let section = indexPath.section
+        let item = indexPath.item
+        
+        var itemCounter : Int = 0
+        let category = sectionArray[section]
+        for dict in arrayOfImageData {
+            if dict["category"] as! String == category {
+                if itemCounter == item {
+                    let name = dict["name"] as! String
+                    let category = dict["category"] as! String
+                    let downloadUrl = dict["download_url"] as! String
+                    let fullImageUrl = "https://share.catrob.at" + downloadUrl
+                    let fullDownloadUrl = NSURL(string: fullImageUrl)!
+                    let data = NSData(contentsOfURL: fullDownloadUrl)!
+                
+                    let image:UIImage = UIImage(data:data)!
+                    let imageView = UIImageView(frame: imageCell.frame)
+                    imageView.image = image
+                    imageCell.contentView.addSubview(imageView)
+                    
+                    imageCell.name = name
+                    imageCell.category = category
+                    imageCell.downloadUrl = downloadUrl
+                }
+                itemCounter += 1
+            }
+        }
+        return imageCell
+    }
+
+    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        let section = indexPath.section
+        let item = indexPath.item
+        
+        var name : String = ""
+        var image : UIImage! = nil
+        
+        var itemCounter : Int = 0
+        let category = sectionArray[section]
+        for dict in arrayOfImageData {
+            if dict["category"] as! String == category {
+                if itemCounter == item {
+                    name = dict["name"] as! String
+                    let fullImageUrl = "https://share.catrob.at" + (dict["download_url"] as! String)
+                    let data = NSData(contentsOfURL: NSURL(string: fullImageUrl)!)!
+                    image = UIImage(data:data)!
+                }
+                itemCounter += 1
+            }
+        }
+        
+        if name != "" && image != nil {
+            dispatch_async(dispatch_get_main_queue(), {
+                self.paintDelegate.addMediaLibraryLoadedImage(image, withName: name)})
+            
+            dispatch_async(dispatch_get_main_queue(), {
+                self.navigationController?.popViewControllerAnimated(true)
+            })
+        }
+    }
     
-        return cell
-    }*/
-
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        let size = (collectionView.frame.size.width) / CGFloat(3)
+        return CGSizeMake(size, size)
     }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
-
 }

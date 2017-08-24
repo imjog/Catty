@@ -25,7 +25,9 @@ import UIKit
 
 class ImageViewCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var imageView: UIImageView!
+    var name : String = ""
+    var category : String = ""
+    var downloadUrl : String = ""
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,5 +36,4 @@ class ImageViewCollectionViewCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
 }
