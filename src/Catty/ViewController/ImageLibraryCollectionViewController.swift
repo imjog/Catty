@@ -22,8 +22,9 @@
 
 
 import UIKit
+import ImageIO
 
-class ImageLibraryCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class ImageLibraryCollectionViewController: UICollectionViewController {
     
     @IBOutlet var imageCollectionView: UICollectionView!
     
@@ -31,7 +32,6 @@ class ImageLibraryCollectionViewController: UICollectionViewController, UICollec
     var paintDelegate : PaintDelegate! = nil
     var arrayOfImageData: Array<Dictionary<String, AnyObject> > = []
     var sectionArray:Array<String> = []
-    var numberOfItemsInSection:Array<Int> = []
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -89,23 +89,11 @@ class ImageLibraryCollectionViewController: UICollectionViewController, UICollec
             arrayOfImageData = jsonObject as! Array<Dictionary<String, AnyObject>>
             
             for dict in arrayOfImageData {
-                if sectionArray.count == 0 {
+                if !sectionArray.contains((dict["category"]) as! String) {
                     sectionArray.append((dict["category"]) as! String)
-                }
-                else {
-                    if !sectionArray.contains((dict["category"]) as! String) {
-                        sectionArray.append((dict["category"]) as! String)
-                    }
                 }
             }
         }
-
-        // Register cell class
-        self.imageCollectionView!.registerClass(ImageViewCollectionViewCell.self, forCellWithReuseIdentifier: "ImageCell")
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -125,43 +113,31 @@ class ImageLibraryCollectionViewController: UICollectionViewController, UICollec
 
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell
     {
-        let cell = imageCollectionView.dequeueReusableCellWithReuseIdentifier("ImageCell", forIndexPath: indexPath)
+        let cell = imageCollectionView.dequeueReusableCellWithReuseIdentifier("imageCell", forIndexPath: indexPath)
 
-        
-        let imageCell : ImageViewCollectionViewCell = cell as! ImageViewCollectionViewCell
-        if imageCell.contentView.subviews.count != 0 {
-            imageCell.contentView.subviews[0].removeFromSuperview()
-        }
-    
-        // Configure the cell
-        let section = indexPath.section
-        let item = indexPath.item
-        
-        var itemCounter : Int = 0
-        let category = sectionArray[section]
-        for dict in arrayOfImageData {
-            if dict["category"] as! String == category {
-                if itemCounter == item {
-                    let name = dict["name"] as! String
-                    let category = dict["category"] as! String
-                    let downloadUrl = dict["download_url"] as! String
-                    let fullImageUrl = "https://share.catrob.at" + downloadUrl
-                    let fullDownloadUrl = NSURL(string: fullImageUrl)!
-                    let data = NSData(contentsOfURL: fullDownloadUrl)!
-                
-                    let image:UIImage = UIImage(data:data)!
-                    let imageView = UIImageView(frame: imageCell.frame)
-                    imageView.image = image
-                    imageCell.contentView.addSubview(imageView)
-                    
-                    imageCell.name = name
-                    imageCell.category = category
-                    imageCell.downloadUrl = downloadUrl
+        if let imageCell = cell as? ImageViewCollectionViewCell {
+            
+            // Configure the cell
+            let section = indexPath.section
+            let item = indexPath.item
+            
+            var itemCounter : Int = 0
+            let category = sectionArray[section]
+            for dict in arrayOfImageData {
+                if dict["category"] as! String == category {
+                    if itemCounter == item {
+                        let downloadUrl = dict["download_url"] as! String
+                        let fullImageUrl = "https://share.catrob.at" + downloadUrl
+                        let fullDownloadUrl = NSURL(string: fullImageUrl)!
+                        let data = NSData(contentsOfURL: fullDownloadUrl)!
+                        
+                        imageCell.imageView.image = UIImage(data:data)!
+                    }
+                    itemCounter += 1
                 }
-                itemCounter += 1
             }
         }
-        return imageCell
+        return cell
     }
 
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
