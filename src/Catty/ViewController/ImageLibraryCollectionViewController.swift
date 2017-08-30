@@ -22,16 +22,17 @@
 
 
 import UIKit
-import ImageIO
 
 class ImageLibraryCollectionViewController: UICollectionViewController {
     
     @IBOutlet var imageCollectionView: UICollectionView!
     
     var imageType: NSString?
-    var paintDelegate : PaintDelegate! = nil
+    var paintDelegate: PaintDelegate! = nil
     var arrayOfImageData: Array<Dictionary<String, AnyObject> > = []
     var sectionArray:Array<String> = []
+    var imageArray = [[UIImage]]()
+    var cellWidth:CGFloat = 0.0
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -63,10 +64,11 @@ class ImageLibraryCollectionViewController: UICollectionViewController {
         var url = NSURL()
         
         if(imageType == "backgrounds") {
-            url = NSURL(string: "https://share.catrob.at/pocketcode/api/media/package/Backgrounds/json")!
+            url = NSURL(string: kTestImageBaseUrl + kBackgroundExtension)!
         }
+            
         else if (imageType == "looks") {
-            url = NSURL(string: "https://share.catrob.at/pocketcode/api/media/package/Looks/json")!
+            url = NSURL(string: kTestImageBaseUrl + kLooksExtension)!
         }
         else {
             print("Fatal Error: no image type")
@@ -78,10 +80,10 @@ class ImageLibraryCollectionViewController: UICollectionViewController {
             do {
                 jsonObject = try NSJSONSerialization.JSONObjectWithData(jsonData, options: .MutableContainers) as! NSArray
             } catch {
-                print("Fatal Error: \(error)")
+                print("Fatal Error: JsonObject cannot be created")
             }
         } catch {
-            print("Fatal Error: \(error)")
+            print("Fatal Error: Json Data not fetchable (check if website is reachable)")
             return;
         }
         
@@ -94,9 +96,10 @@ class ImageLibraryCollectionViewController: UICollectionViewController {
                 }
             }
         }
+        imageArray = Array(count: sectionArray.count, repeatedValue: [UIImage]())
     }
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return sectionArray.count
     }
     
@@ -116,22 +119,34 @@ class ImageLibraryCollectionViewController: UICollectionViewController {
         let cell = imageCollectionView.dequeueReusableCellWithReuseIdentifier("imageCell", forIndexPath: indexPath)
 
         if let imageCell = cell as? ImageViewCollectionViewCell {
-            
-            // Configure the cell
             let section = indexPath.section
             let item = indexPath.item
-            
-            var itemCounter : Int = 0
             let category = sectionArray[section]
+            var itemCounter: Int = 0
+            
             for dict in arrayOfImageData {
                 if dict["category"] as! String == category {
-                    if itemCounter == item {
+                    if itemCounter == indexPath.item {
                         let downloadUrl = dict["download_url"] as! String
-                        let fullImageUrl = "https://share.catrob.at" + downloadUrl
-                        let fullDownloadUrl = NSURL(string: fullImageUrl)!
-                        let data = NSData(contentsOfURL: fullDownloadUrl)!
+                        let fullImageUrl = kTestImageBaseUrl + downloadUrl
                         
-                        imageCell.imageView.image = UIImage(data:data)!
+                        if(self.imageArray[section].count > item){
+                            imageCell.imageView.image = self.imageArray[section][item]
+                        }
+                        else {
+                            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), {
+                                if let url = NSURL(string: fullImageUrl) {
+                                    if let data = NSData(contentsOfURL: url) {
+
+                                        dispatch_async(dispatch_get_main_queue(), {
+                                            let image: UIImage = UIImage(data: data)!
+                                            self.imageArray[section].append(image)
+                                            imageCell.imageView.image = image
+                                        })
+                                    }
+                                }
+                            })
+                        }
                     }
                     itemCounter += 1
                 }
@@ -142,26 +157,26 @@ class ImageLibraryCollectionViewController: UICollectionViewController {
 
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        let section = indexPath.section
-        let item = indexPath.item
-        
         var name : String = ""
         var image : UIImage! = nil
         
-        var itemCounter : Int = 0
-        let category = sectionArray[section]
+        let category = sectionArray[indexPath.section]
         for dict in arrayOfImageData {
             if dict["category"] as! String == category {
-                if itemCounter == item {
+                let fullImageUrl = kTestImageBaseUrl + (dict["download_url"] as! String)
+                let data = NSData(contentsOfURL: NSURL(string: fullImageUrl)!)!
+                
+                let img = UIImage(data: data)!
+                let imgPng: NSData = UIImagePNGRepresentation(img)!
+                
+                let arrayImageData: NSData = UIImagePNGRepresentation(imageArray[indexPath.section][indexPath.item])!
+                if imgPng.isEqualToData(arrayImageData) {
                     name = dict["name"] as! String
-                    let fullImageUrl = "https://share.catrob.at" + (dict["download_url"] as! String)
-                    let data = NSData(contentsOfURL: NSURL(string: fullImageUrl)!)!
                     image = UIImage(data:data)!
+                    break
                 }
-                itemCounter += 1
             }
         }
-        
         if name != "" && image != nil {
             dispatch_async(dispatch_get_main_queue(), {
                 self.paintDelegate.addMediaLibraryLoadedImage(image, withName: name)})
@@ -173,7 +188,34 @@ class ImageLibraryCollectionViewController: UICollectionViewController {
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let size = (collectionView.frame.size.width) / CGFloat(3)
-        return CGSizeMake(size, size)
+        // The with of a cell is the frame size minus the space between the cells divided by
+        // the number of cells which should be in one row.
+        cellWidth = (collectionView.frame.size.width - (4 * 30)) / CGFloat(3)
+        return CGSizeMake(cellWidth, cellWidth)
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+         return CGSizeMake(collectionView.frame.width, 70)
+    }
+    
+    override func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+        
+        if kind == UICollectionElementKindSectionHeader {
+            if let sectionHeader = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "sectionHeader", forIndexPath: indexPath) as? SectionHeaderCollectionReusableView {
+                
+                //Section Title
+                sectionHeader.sectionHeaderLabel.text = sectionArray[indexPath.section].uppercaseString
+                sectionHeader.sectionHeaderLabel.textColor = UIColor.navBarColor()
+                sectionHeader.sectionHeaderLabel.font = UIFont(name:"HelveticaNeue-Bold", size: 35.0)
+                
+                //Separation Line
+                sectionHeader.seperationLine.backgroundColor = UIColor.navBarColor()
+                return sectionHeader
+            }
+        }
+        else {
+            print("No Section Header found")
+        }
+        return UICollectionReusableView()
     }
 }

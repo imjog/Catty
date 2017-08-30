@@ -26,6 +26,9 @@
 #define kConnectionTimeout 15
 #define kBaseUrl @"https://share.catrob.at/pocketcode/"
 #define kTestUrl @"https://catroid-test.catrob.at/pocketcode/"
+#define kTestImageBaseUrl @"https://web-test.catrob.at"
+#define kBackgroundExtension @"/pocketcode/api/media/package/Backgrounds/json"
+#define kLooksExtension @"/pocketcode/api/media/package/Looks/json"
 #define kConnectionHost kBaseUrl @"api/projects"
 #define kLoginOrRegisterUrlExtension @"api/loginOrRegister"
 #define kLoginUrlExtension @"api/login"
