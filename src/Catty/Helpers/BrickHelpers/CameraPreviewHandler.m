@@ -56,11 +56,16 @@ static CameraPreviewHandler* shared = nil;
 {
     self = [super init];
     if (self) {
-        self.cameraPosition = AVCaptureDevicePositionBack;
+        self.cameraPosition = AVCaptureDevicePositionFront;
         self.session = [[AVCaptureSession alloc] init];
     }
     
     return self;
+}
+
+- (AVCaptureSession*)getSession
+{
+    return self.session;
 }
 
 - (void)setCamView:(UIView *)camView
@@ -90,6 +95,11 @@ static CameraPreviewHandler* shared = nil;
 - (void)startCameraPreview
 {
     assert(self.camView);
+    
+    if (self.session.isRunning)
+    {
+        return;
+    }
     
     camLayer = [[CALayer alloc] init];
     camLayer.accessibilityHint = camAccessibility;
@@ -155,6 +165,10 @@ static CameraPreviewHandler* shared = nil;
         [camLayer removeFromSuperlayer];
     }
     [self.session stopRunning];
+    for (AVCaptureDeviceInput* input in self.session.inputs)
+    {
+        [self.session removeInput:input];
+    }
 }
 
 

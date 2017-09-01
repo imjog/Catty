@@ -100,6 +100,8 @@
 #import "CameraBrick.h"
 #import "RepeatBrick.h"
 #import "RepeatUntilBrick.h"
+#import "CameraBrick.h"
+#import "ChooseCameraBrick.h"
 #import "SayBubbleBrick.h"
 #import "SayForBubbleBrick.h"
 #import "ThinkBubbleBrick.h"

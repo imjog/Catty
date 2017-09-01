@@ -201,10 +201,11 @@ typedef NS_ENUM(NSUInteger, kBrickType) {
     kClearGraphicEffectBrick   = 214,
     kFlashBrick                = 215,
     kCameraBrick               = 216,
-    kSayBubbleBrick            = 217,
-    kSayForBubbleBrick         = 218,
-    kThinkBubbleBrick          = 219,
-    kThinkForBubbleBrick       = 220,
+    kChooseCameraBrick         = 217,
+    kSayBubbleBrick            = 218,
+    kSayForBubbleBrick         = 219,
+    kThinkBubbleBrick          = 220,
+    kThinkForBubbleBrick       = 221,
 
     
     // 3xx sound bricks
@@ -353,6 +354,7 @@ WRAP_BRICK_TYPE_IN_NSSTRING(kChangeVariableBrick)\
     @"ClearGraphicEffectBrick"   : @(kClearGraphicEffectBrick),\
     @"FlashBrick"                : @(kFlashBrick),\
     @"CameraBrick"               : @(kCameraBrick),\
+    @"ChooseCameraBrick"         : @(kChooseCameraBrick),\
     @"SayBubbleBrick"            : @(kSayBubbleBrick),\
     @"SayForBubbleBrick"         : @(kSayForBubbleBrick),\
     @"ThinkBubbleBrick"          : @(kThinkBubbleBrick),\
@@ -449,6 +451,7 @@ typedef NS_ENUM(NSInteger, kBrickShapeType) {
 @"ChangeColorByNBrick"       : @(kBrickHeight1h),\
 @"FlashBrick"                : @(kBrickHeight2h),\
 @"CameraBrick"               : @(kBrickHeight2h),\
+@"ChooseCameraBrick"         : @(kBrickHeight2h),\
 @"SayBubbleBrick"            : @(kBrickHeight2h),\
 @"SayForBubbleBrick"         : @(kBrickHeight2h),\
 @"ThinkBubbleBrick"          : @(kBrickHeight2h),\
