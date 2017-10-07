@@ -108,7 +108,8 @@
 - (Program*)lastUsedProgram
 {
     if (! _lastUsedProgram) {
-        _lastUsedProgram = [Program lastUsedProgram];
+        AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+        _lastUsedProgram = [Program lastUsedProgramWithFileManager:appDelegate.fileManager];
     }
     return _lastUsedProgram;
 }
@@ -280,7 +281,8 @@
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"iPhone" bundle: nil];
         UploadInfoViewController * vc = [storyboard instantiateViewControllerWithIdentifier:@"UploadController"];
         if (self.uploadingProgramInfos.count) {
-            Program * prog = [Program programWithLoadingInfo:self.uploadingProgramInfos[0]];
+            AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+            Program * prog = [Program programWithLoadingInfo:self.uploadingProgramInfos[0] fileManager:appDelegate.fileManager];
             vc.program = prog;
             UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:vc];
             self.tableView.scrollEnabled = NO;

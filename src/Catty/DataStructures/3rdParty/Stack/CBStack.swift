@@ -32,14 +32,14 @@ import Foundation
 
 class CBStack<T> {
     
-    private var top: LLNode<T>! = LLNode<T>()
+    fileprivate var top: LLNode<T>! = LLNode<T>()
 
     
     //TODO: Add count computed property
     
     
     //push an item onto the stack
-    func push(key: T) {
+    func push(_ key: T) {
         
         
         //check for the instance

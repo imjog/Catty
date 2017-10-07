@@ -187,7 +187,8 @@
         NSString *localProgramName = [Program programNameForProgramID:self.project.projectID];
 
         // check if program loaded successfully -> not nil
-        self.loadedProgram = [Program programWithLoadingInfo:[ProgramLoadingInfo programLoadingInfoForProgramWithName:localProgramName programID:self.project.projectID]];
+        AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+        self.loadedProgram = [Program programWithLoadingInfo:[ProgramLoadingInfo programLoadingInfoForProgramWithName:localProgramName programID:self.project.projectID] fileManager:appDelegate.fileManager];
 
         if (self.loadedProgram) {
             return YES;

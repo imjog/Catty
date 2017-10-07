@@ -25,8 +25,8 @@ class CBConditionalSequence: CBSequenceProtocol, CBSequenceVisitProtocol {
     // MARK: - Properties
     final weak var rootSequenceList: CBScriptSequenceList?
     final let sequenceList: CBSequenceList
-    final var lastLoopIterationStartTime: NSDate = NSDate()
-    final private weak var _conditionBrick: BrickConditionalBranchProtocol!
+    final var lastLoopIterationStartTime: Date = Date()
+    final fileprivate weak var _conditionBrick: BrickConditionalBranchProtocol!
 
     // MARK: - Initializers
     init(rootSequenceList: CBScriptSequenceList, conditionBrick: BrickConditionalBranchProtocol, sequenceList: CBSequenceList) {
@@ -48,20 +48,20 @@ class CBConditionalSequence: CBSequenceProtocol, CBSequenceVisitProtocol {
         _conditionBrick.resetCondition()
     }
     
-    final func bufferCondition(sprite:SpriteObject?) {
+    final func bufferCondition(_ sprite:SpriteObject?) {
         for formula:Formula in _conditionBrick.conditions() {
-            formula.preCalculateFormulaForSprite(sprite)
+            formula.preCalculate(forSprite: sprite)
         }
     }
     final func hasBluetoothFormula() -> Bool {
         for formula:Formula in _conditionBrick.conditions() {
-            if (formula.getRequiredResources() & ResourceType.BluetoothArduino.rawValue) > 0 {
+            if (formula.getRequiredResources() & ResourceType.bluetoothArduino.rawValue) > 0 {
                 return true
             }
         }
         return false
     }
-    func accept(visitor: CBOptimizeSequenceVisitorProtocol) {
+    func accept(_ visitor: CBOptimizeSequenceVisitorProtocol) {
         visitor.visit(self)
     }
 

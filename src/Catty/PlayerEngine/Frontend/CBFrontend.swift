@@ -24,8 +24,8 @@ final class CBFrontend: CBFrontendProtocol {
 
     // MARK: - Properties
     let logger: CBLogger
-    private(set) weak var program: Program?
-    private lazy var _sequenceFilters = [CBFrontendSequenceFilterProtocol]()
+    fileprivate(set) weak var program: Program?
+    fileprivate lazy var _sequenceFilters = [CBFrontendSequenceFilterProtocol]()
 
     // MARK: - Initializers
     init(logger: CBLogger, program: Program?) {
@@ -34,11 +34,11 @@ final class CBFrontend: CBFrontendProtocol {
     }
 
     // MARK: - Operations
-    func addSequenceFilter(sequenceFilter: CBFrontendSequenceFilterProtocol) {
+    func addSequenceFilter(_ sequenceFilter: CBFrontendSequenceFilterProtocol) {
         _sequenceFilters += sequenceFilter
     }
 
-    func computeSequenceListForScript(script : Script) -> CBScriptSequenceList {
+    func computeSequenceListForScript(_ script : Script) -> CBScriptSequenceList {
         var currentSequenceList = CBSequenceList(rootSequenceList: nil)
         let scriptSequenceList = CBScriptSequenceList(script: script, sequenceList: currentSequenceList)
         var currentOperationSequence = CBOperationSequence(rootSequenceList: scriptSequenceList)

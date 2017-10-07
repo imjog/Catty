@@ -26,17 +26,19 @@
 #import "CBXMLSerializerContext.h"
 #import "CatrobatLanguageDefines.h"
 #import "CBXMLPositionStack.h"
+#import "FileManager.h"
 
 @interface CBXMLSerializer()
 
 @property (nonatomic, strong) NSString *xmlPath;
+@property (nonatomic, strong) FileManager *fileManager;
 
 @end
 
 @implementation CBXMLSerializer
 
 #pragma mark - Initialization
-- (id)initWithPath:(NSString*)path
+- (id)initWithPath:(NSString*)path fileManager:(FileManager *)fileManager
 {
     if (self = [super init]) {
         // sanity check
@@ -45,6 +47,7 @@
             return nil;
         }
         self.xmlPath = path;
+        self.fileManager = fileManager;
     }
     return self;
 }
@@ -91,7 +94,8 @@
 
         // update last access time
         [Program updateLastModificationTimeForProgramWithName:program.header.programName
-                                                    programID:program.header.programID];
+                                                    programID:program.header.programID
+                                                  fileManager:self.fileManager];
         NSInfo(@"Saving finished...");
     } @catch(NSException *exception) {
         NSError(@"Program could not be serialized! %@", [exception description]);

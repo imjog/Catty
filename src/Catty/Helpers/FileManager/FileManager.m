@@ -322,7 +322,7 @@
     }
     [self addNewBundleProgramWithName:kDefaultProgramBundleName];
     ProgramLoadingInfo *loadingInfo = [ProgramLoadingInfo programLoadingInfoForProgramWithName:kDefaultProgramBundleName programID:nil];
-    Program *program = [Program programWithLoadingInfo:loadingInfo];
+    Program *program = [Program programWithLoadingInfo:loadingInfo fileManager:self];
     [program translateDefaultProgram];
 }
 

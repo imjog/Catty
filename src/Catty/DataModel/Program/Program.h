@@ -23,6 +23,7 @@
 #import "Header.h"
 #import "ProgramDefines.h"
 
+@class FileManager;
 @class VariablesContainer;
 @class SpriteObject;
 @class ProgramLoadingInfo;
@@ -60,10 +61,11 @@
 
 + (instancetype _Nonnull)defaultProgramWithName:(NSString* _Nonnull)programName
                                       programID:(NSString* _Nullable)programID;
-+ (instancetype _Nonnull)lastUsedProgram;
++ (instancetype _Nonnull)lastUsedProgramWithFileManager:(FileManager * _Nonnull)fileManager;
 + (void)updateLastModificationTimeForProgramWithName:(NSString* _Nonnull)programName
-                                           programID:(NSString* _Nonnull)programID;
-+ (instancetype _Nonnull)programWithLoadingInfo:(ProgramLoadingInfo* _Nonnull)loadingInfo;
+                                           programID:(NSString* _Nonnull)programID
+                                         fileManager:(FileManager * _Nonnull)fileManager;
++ (instancetype _Nonnull)programWithLoadingInfo:(ProgramLoadingInfo* _Nonnull)loadingInfo fileManager:(FileManager *_Nonnull)fileManager;
 + (BOOL)programExistsWithProgramName:(NSString* _Nonnull)programName
                            programID:(NSString* _Nonnull)programID;
 + (BOOL)programExistsWithProgramID:(NSString* _Nonnull)programID;

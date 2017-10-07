@@ -21,6 +21,7 @@
  */
 
 #import "BaseCollectionViewController.h"
+#import "AppDelegate.h"
 #import "UIDefines.h"
 #import "Util.h"
 #import "LoadingView.h"
@@ -128,9 +129,10 @@
     if ([self respondsToSelector:@selector(stopAllSounds)]) {
         [self performSelector:@selector(stopAllSounds)];
     }
-    
+
+    AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     self.scenePresenterViewController = [ScenePresenterViewController new];
-    self.scenePresenterViewController.program = [Program programWithLoadingInfo:[Util lastUsedProgramLoadingInfo]];
+    self.scenePresenterViewController.program = [Program programWithLoadingInfo:[Util lastUsedProgramLoadingInfo] fileManager:appDelegate.fileManager];
     NSInteger resources = [self.scenePresenterViewController.program getRequiredResources];
     if ([ResourceHelper checkResources:resources delegate:self]) {
         [self startSceneWithVC:self.scenePresenterViewController];

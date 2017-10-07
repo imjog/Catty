@@ -214,7 +214,8 @@ static NSCharacterSet *blockedCharacterSet = nil;
         return;
     
     [self showLoadingView];
-    Program *program = [Program programWithLoadingInfo:programLoadingInfo];
+    AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    Program *program = [Program programWithLoadingInfo:programLoadingInfo fileManager:appDelegate.fileManager];
     newProgramName = [Util uniqueName:newProgramName existingNames:[Program allProgramNames]];
     [program renameToProgramName:newProgramName];
     [self renameOldProgramWithName:programLoadingInfo.visibleName
@@ -383,6 +384,7 @@ static NSCharacterSet *blockedCharacterSet = nil;
         NSString *sectionTitle = [self.sectionTitles objectAtIndex:indexPath.section];
         NSArray *sectionInfos = [self.programLoadingInfoDict objectForKey:[[sectionTitle substringToIndex:1] uppercaseString]];
         ProgramLoadingInfo *info = sectionInfos[indexPath.row];
+        AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
         
         [[[[[[[[AlertControllerBuilder actionSheetWithTitle:kLocalizedEditProgram]
          addCancelActionWithTitle:kLocalizedCancel handler:nil]
@@ -420,7 +422,7 @@ static NSCharacterSet *blockedCharacterSet = nil;
                                           existingNames:unavailableNames];
          }]
          addDefaultActionWithTitle:kLocalizedDescription handler:^{
-             Program *program = [Program programWithLoadingInfo:info];
+             Program *program = [Program programWithLoadingInfo:info fileManager:appDelegate.fileManager];
              UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"iPhone" bundle: nil];
              DescriptionViewController * dViewController = [storyboard instantiateViewControllerWithIdentifier:@"DescriptionViewController"];
              dViewController.delegate = self;
@@ -564,7 +566,8 @@ static NSCharacterSet *blockedCharacterSet = nil;
             NSString *sectionTitle = [self.sectionTitles objectAtIndex:path.section];
             NSArray *sectionInfos = [self.programLoadingInfoDict objectForKey:[[sectionTitle substringToIndex:1] uppercaseString]];
             ProgramLoadingInfo *info = [sectionInfos objectAtIndex:path.row];
-            self.selectedProgram =[Program programWithLoadingInfo:info];
+            AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+            self.selectedProgram =[Program programWithLoadingInfo:info fileManager:appDelegate.fileManager];
             if (![self.selectedProgram.header.programName isEqualToString:info.visibleName]) {
                 self.selectedProgram.header.programName = info.visibleName;
                 [self.selectedProgram saveToDiskWithNotification:YES];

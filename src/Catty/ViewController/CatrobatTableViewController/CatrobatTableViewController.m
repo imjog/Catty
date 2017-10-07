@@ -77,7 +77,8 @@ static NSCharacterSet *blockedCharacterSet = nil;
 - (Program*)lastUsedProgram
 {
     if (! _lastUsedProgram) {
-        _lastUsedProgram = [Program lastUsedProgram];
+        AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+        _lastUsedProgram = [Program lastUsedProgramWithFileManager:appDelegate.fileManager];
     }
     return _lastUsedProgram;
 }

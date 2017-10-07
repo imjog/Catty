@@ -66,7 +66,7 @@
     return program;
 }
 
-+ (instancetype)programWithLoadingInfo:(ProgramLoadingInfo*)loadingInfo;
++ (instancetype)programWithLoadingInfo:(ProgramLoadingInfo*)loadingInfo fileManager:(FileManager *)fileManager;
 {
     NSDebug(@"Try to load project '%@'", loadingInfo.visibleName);
     NSDebug(@"Path: %@", loadingInfo.basePath);
@@ -101,22 +101,21 @@
 
     NSDebug(@"%@", [program description]);
     NSDebug(@"ProjectResolution: width/height:  %f / %f", program.header.screenWidth.floatValue, program.header.screenHeight.floatValue);
-    [self updateLastModificationTimeForProgramWithName:loadingInfo.visibleName programID:loadingInfo.programID];
+    [self updateLastModificationTimeForProgramWithName:loadingInfo.visibleName programID:loadingInfo.programID fileManager:fileManager];
     return program;
 }
 
-+ (instancetype)lastUsedProgram
++ (instancetype)lastUsedProgramWithFileManager:(FileManager *)fileManager
 {
-    return [Program programWithLoadingInfo:[Util lastUsedProgramLoadingInfo]];
+    return [Program programWithLoadingInfo:[Util lastUsedProgramLoadingInfo] fileManager:fileManager];
 }
 
-+ (void)updateLastModificationTimeForProgramWithName:(NSString*)programName programID:(NSString*)programID
++ (void)updateLastModificationTimeForProgramWithName:(NSString*)programName programID:(NSString*)programID fileManager:(FileManager *)fileManager
 {
     NSString *xmlPath = [NSString stringWithFormat:@"%@%@",
                          [self projectPathForProgramWithName:programName programID:programID],
                          kProgramCodeFileName];
-    AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    [appDelegate.fileManager changeModificationDate:[NSDate date] forFileAtPath:xmlPath];
+    [fileManager changeModificationDate:[NSDate date] forFileAtPath:xmlPath];
 }
 
 - (NSInteger)numberOfTotalObjects
@@ -253,7 +252,7 @@
     AppDelegate *appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     [appDelegate.fileManager copyExistingDirectoryAtPath:sourceProgramPath toPath:destinationProgramPath];
     ProgramLoadingInfo *destinationProgramLoadingInfo = [ProgramLoadingInfo programLoadingInfoForProgramWithName:destinationProgramName programID:nil];
-    Program *program = [Program programWithLoadingInfo:destinationProgramLoadingInfo];
+    Program *program = [Program programWithLoadingInfo:destinationProgramLoadingInfo fileManager:appDelegate.fileManager];
     program.header.programName = destinationProgramLoadingInfo.visibleName;
     [program saveToDiskWithNotification:YES];
 }
@@ -283,6 +282,7 @@
 
 - (void)saveToDiskWithNotification:(BOOL)notify
 {
+    FileManager *fileManager = ((AppDelegate*)[[UIApplication sharedApplication] delegate]).fileManager;
     dispatch_queue_t saveToDiskQ = dispatch_queue_create("save to disk", NULL);
     dispatch_async(saveToDiskQ, ^{
         // show saved view bezel
@@ -295,7 +295,7 @@
         }
         // TODO: find correct serializer class dynamically
         NSString *xmlPath = [NSString stringWithFormat:@"%@%@", [self projectPath], kProgramCodeFileName];
-        id<CBSerializerProtocol> serializer = [[CBXMLSerializer alloc] initWithPath:xmlPath];
+        id<CBSerializerProtocol> serializer = [[CBXMLSerializer alloc] initWithPath:xmlPath fileManager:fileManager];
         [serializer serializeProgram:self];
 
         dispatch_async(dispatch_get_main_queue(), ^{
