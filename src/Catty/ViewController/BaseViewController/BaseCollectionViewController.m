@@ -45,6 +45,8 @@
 
 - (void) viewDidLoad
 {
+    [super viewDidLoad];
+    
     NSLayoutConstraint *topConstraint = [NSLayoutConstraint
                                          constraintWithItem:self.placeHolderView
                                          attribute:NSLayoutAttributeTop

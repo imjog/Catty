@@ -272,6 +272,6 @@ public struct OrderedDictionary<Key: Hashable, Value>: MutableCollection, Expres
     
 }
 
-public func == <Key: Equatable, Value: Equatable>(lhs: OrderedDictionary<Key, Value>, rhs: OrderedDictionary<Key, Value>) -> Bool {
+public func ==<Key, Value>(lhs: OrderedDictionary<Key, Value>, rhs: OrderedDictionary<Key, Value>) -> Bool where Value: Equatable {
     return lhs._orderedKeys == rhs._orderedKeys && lhs._keysToValues == rhs._keysToValues
 }

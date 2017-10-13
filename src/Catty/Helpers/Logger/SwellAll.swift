@@ -1163,7 +1163,7 @@ open class Swell {
                 configuration.formatter = getConfiguredFlexFormatter(configuration, item: value);
             } else {
                 let formatKey = getFormatKey(map)
-                print("formatKey=\(formatKey)")
+                print("formatKey=\(String(describing: formatKey))")
             }
         }
         

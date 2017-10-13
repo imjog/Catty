@@ -79,7 +79,7 @@ class KnownDevicesTableViewController: BluetoothDevicesTableViewController {
 //        }
         let userdefaults = UserDefaults.standard
         var knownCBPeripherals:[CBPeripheral]
-        if let tempArray : [AnyObject] = userdefaults.array(forKey: "KnownBluetoothDevices") as? [AnyObject] {
+        if let tempArray : [AnyObject] = userdefaults.array(forKey: "KnownBluetoothDevices") as [AnyObject]? {
             let stringArray:[NSString] = tempArray as! [NSString]
             var UUIDArray:[UUID] = [UUID]()
             for id:NSString in stringArray {

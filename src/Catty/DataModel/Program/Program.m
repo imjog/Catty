@@ -66,7 +66,7 @@
     return program;
 }
 
-+ (instancetype)programWithLoadingInfo:(ProgramLoadingInfo*)loadingInfo fileManager:(FileManager *)fileManager;
++ (nullable instancetype)programWithLoadingInfo:(ProgramLoadingInfo*)loadingInfo fileManager:(FileManager *)fileManager;
 {
     NSDebug(@"Try to load project '%@'", loadingInfo.visibleName);
     NSDebug(@"Path: %@", loadingInfo.basePath);
@@ -563,7 +563,7 @@
             (programID ? programID : kNoProgramIDYetPlaceholder)];
 }
 
-+ (ProgramLoadingInfo*)programLoadingInfoForProgramDirectoryName:(NSString*)directoryName
++ (nullable ProgramLoadingInfo*)programLoadingInfoForProgramDirectoryName:(NSString*)directoryName
 {
     CBAssert(directoryName);
     NSArray *directoryNameParts = [directoryName componentsSeparatedByString:kProgramIDSeparator];
@@ -575,7 +575,7 @@
     return [ProgramLoadingInfo programLoadingInfoForProgramWithName:programName programID:programID];
 }
 
-+ (NSString*)programNameForProgramID:(NSString*)programID
++ (nullable NSString *)programNameForProgramID:(NSString*)programID
 {
     if ((! programID) || (! [programID length])) {
         return nil;
