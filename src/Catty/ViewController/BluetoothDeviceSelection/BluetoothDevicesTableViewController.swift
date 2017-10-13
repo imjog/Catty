@@ -38,7 +38,7 @@ class BluetoothDevicesTableViewController:UITableViewController{
     }
     
     weak var delegate : BluetoothPopupVC?
-    fileprivate let loadingView = LoadingView()
+    private let loadingView = LoadingView()
     
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -32,7 +32,7 @@ import Foundation
 
 class CBStack<T> {
     
-    fileprivate var top: LLNode<T>! = LLNode<T>()
+    private var top: LLNode<T>! = LLNode<T>()
 
     
     //TODO: Add count computed property

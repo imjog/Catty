@@ -25,10 +25,10 @@ final class CBBroadcastHandler: CBBroadcastHandlerProtocol {
     // MARK: - Properties
     var logger: CBLogger
     weak var scheduler: CBSchedulerProtocol?
-    fileprivate lazy var _broadcastWaitingContexts = [String:CBScriptContextProtocol]()
-    fileprivate lazy var _broadcastWaitingContextsQueue = [String:[CBBroadcastScriptContextProtocol]]()
-    fileprivate lazy var _registeredBroadcastContexts = [String:[CBBroadcastScriptContextProtocol]]()
-    fileprivate lazy var _selfBroadcastCounters = [String:Int]()
+    private lazy var _broadcastWaitingContexts = [String:CBScriptContextProtocol]()
+    private lazy var _broadcastWaitingContextsQueue = [String:[CBBroadcastScriptContextProtocol]]()
+    private lazy var _registeredBroadcastContexts = [String:[CBBroadcastScriptContextProtocol]]()
+    private lazy var _selfBroadcastCounters = [String:Int]()
     
     // MARK: - Initializers
     init(logger: CBLogger, scheduler: CBSchedulerProtocol?) {
@@ -134,7 +134,7 @@ final class CBBroadcastHandler: CBBroadcastHandlerProtocol {
         }
     }
     
-    fileprivate func _performSelfBroadcastForContext(_ context: CBBroadcastScriptContextProtocol) {
+    private func _performSelfBroadcastForContext(_ context: CBBroadcastScriptContextProtocol) {
         let message = context.broadcastMessage
         var counter = 0
         if let counterNumber = _selfBroadcastCounters[message] {

@@ -24,7 +24,7 @@ import UIKit
 import CoreBluetooth
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+private func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
     return l < r
@@ -37,7 +37,7 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+private func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
     return l > r
@@ -188,7 +188,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     
     
     //MARK: Helper
-    fileprivate func removeAll() {
+    private func removeAll() {
         self.ownServices.removeAll()
         self.ownCharacteristics.removeAll()
     }
@@ -270,17 +270,17 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 open class PeripheralHelper<P> where P:PeripheralWrapper,
                           P.ServiceWrap:ServiceWrapper {
     
-    fileprivate var connectionPromise : StreamPromise<(P, ConnectionEvent)>?
-    fileprivate var servicesDiscoveredPromise   = Promise<P>()
-    fileprivate var readRSSIPromise             = Promise<Int>()
+    private var connectionPromise : StreamPromise<(P, ConnectionEvent)>?
+    private var servicesDiscoveredPromise   = Promise<P>()
+    private var readRSSIPromise             = Promise<Int>()
     
     internal var timeoutRetries         : Int?
     internal var disconnectRetries      : Int?
     internal var connectionTimeout      = 5.0
     
-    fileprivate var connectionSequence      = 0
-    fileprivate var currentError            = PeripheralConnectionError.none
-    fileprivate var forcedDisconnect        = false
+    private var connectionSequence      = 0
+    private var currentError            = PeripheralConnectionError.none
+    private var forcedDisconnect        = false
     
     
     
@@ -318,7 +318,7 @@ open class PeripheralHelper<P> where P:PeripheralWrapper,
         }
     }
     
-    fileprivate func timeoutConnection(_ peripheral:P, sequence:Int) {
+    private func timeoutConnection(_ peripheral:P, sequence:Int) {
         CentralQueue.delay(self.connectionTimeout) {
             if peripheral.state != .connected && sequence == self.connectionSequence && !self.forcedDisconnect {
                 self.currentError = .timeout

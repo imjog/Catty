@@ -73,16 +73,16 @@ enum PinMode:Int{
 
 class Firmata: FirmataProtocol {
     
-    fileprivate let FIRST_DIGITAL_PIN = 3
-    fileprivate let LAST_DIGITAL_PIN = 8
-    fileprivate let FIRST_ANALOG_PIN = 14
-    fileprivate let LAST_ANALOG_PIN = 19
-    fileprivate let PORT_COUNT = 3
+    private let FIRST_DIGITAL_PIN = 3
+    private let LAST_DIGITAL_PIN = 8
+    private let FIRST_ANALOG_PIN = 14
+    private let LAST_ANALOG_PIN = 19
+    private let PORT_COUNT = 3
 
-    fileprivate var portMasks = [UInt8](repeating: 0, count: 3)
+    private var portMasks = [UInt8](repeating: 0, count: 3)
     var delegate : FirmataDelegate!
-    fileprivate var sysexData:NSMutableData = NSMutableData()
-    fileprivate var seenStartSysex:Bool = false
+    private var sysexData:NSMutableData = NSMutableData()
+    private var seenStartSysex:Bool = false
     
     //MARK: WRITE
     /* PINMODE
@@ -610,7 +610,7 @@ class Firmata: FirmataProtocol {
     }
     
     
-    fileprivate func processInputData(_ data:[UInt8], length:Int) {
+    private func processInputData(_ data:[UInt8], length:Int) {
         
         //Parse data we received
         
@@ -663,7 +663,7 @@ class Firmata: FirmataProtocol {
         }
     }
     
-    fileprivate func updateForPinStates(_ pinStates:Int, port:Int) {
+    private func updateForPinStates(_ pinStates:Int, port:Int) {
         print(self, "getting pin states <--", "[\(binaryforByte(portMasks[0]))] [\(binaryforByte(portMasks[1]))] [\(binaryforByte(portMasks[2]))]")
         let offset = 8 * port
         
@@ -695,7 +695,7 @@ class Firmata: FirmataProtocol {
     * x  ...for as many bytes as it needs)
     * 4  END_SYSEX (0xF7)
     */
-    fileprivate func parseStringData(_ data:Data){
+    private func parseStringData(_ data:Data){
         
         let range:NSRange = NSMakeRange (2, data.count-3)
         let nameData = data.subdata(in: Range(range)!) // FIXME: never force unwrap!
@@ -714,7 +714,7 @@ class Firmata: FirmataProtocol {
     * x  ...for as many bytes as it needs)
     * 6  END_SYSEX (0xF7)
     */
-    fileprivate func parseReportFirmwareResponse(_ data:Data){
+    private func parseReportFirmwareResponse(_ data:Data){
         let range:NSRange = NSMakeRange (4, data.count-5)
     
         let count = data.count / MemoryLayout<UInt8>.size
@@ -735,7 +735,7 @@ class Firmata: FirmataProtocol {
     * 1  major version (0-127)
     * 2  minor version (0-127)
     */
-    fileprivate func parseReportVersionResponse(_ data:Data){
+    private func parseReportVersionResponse(_ data:Data){
         
         let count = data.count / MemoryLayout<UInt8>.size
         var bytes = [UInt8](repeating: 0, count: count)
@@ -759,7 +759,7 @@ class Firmata: FirmataProtocol {
     * N  END_SYSEX (0xF7)
     The pin "state" is any data written to the pin. For output modes (digital output, PWM, and Servo), the state is any value that has been previously written to the pin. A GUI needs this state to properly initialize any on-screen controls, so their initial settings match whatever the pin is actually doing. For input modes, typically the state is zero. However, for digital inputs, the state is the status of the pullup resistor.
     */
-    fileprivate func parsePinStateResponse(_ data:Data){
+    private func parsePinStateResponse(_ data:Data){
         let count = data.count / MemoryLayout<UInt8>.size
         var bytes = [UInt8](repeating: 0, count: count)
         (data as NSData).getBytes(&bytes, length:count * MemoryLayout<UInt8>.size)
@@ -802,7 +802,7 @@ class Firmata: FirmataProtocol {
     ...   etc, one byte for each pin
     * N  END_SYSEX (0xF7)
     */
-    fileprivate func parseAnalogMappingResponse(_ data:Data){
+    private func parseAnalogMappingResponse(_ data:Data){
         let analogMapping:NSMutableDictionary = NSMutableDictionary()
     
         var j:UInt8 = 0
@@ -837,7 +837,7 @@ class Firmata: FirmataProtocol {
     127, until all pins implemented.
     * N  END_SYSEX (0xF7)
     */
-    fileprivate func parseCapabilityResponse(_ data:Data){
+    private func parseCapabilityResponse(_ data:Data){
         
         var pins = [[Int:Int]]()
     
@@ -877,7 +877,7 @@ class Firmata: FirmataProtocol {
 
 
     //MARK: Helper
-    fileprivate func pinStateForInt(_ stateInt:Int) ->PinState{
+    private func pinStateForInt(_ stateInt:Int) ->PinState{
         
         var state:PinState
         
@@ -897,7 +897,7 @@ class Firmata: FirmataProtocol {
         return state
     }
     
-    fileprivate func stringForPinMode(_ mode:PinMode)->NSString{
+    private func stringForPinMode(_ mode:PinMode)->NSString{
         
         var modeString: NSString
         
@@ -926,7 +926,7 @@ class Firmata: FirmataProtocol {
         
     }
     
-    fileprivate func binaryforByte(_ value: UInt8) -> String {
+    private func binaryforByte(_ value: UInt8) -> String {
         
         var str = String(value, radix: 2)
         let len = str.characters.count

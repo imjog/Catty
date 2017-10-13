@@ -50,7 +50,7 @@ final class CBBackend: CBBackendProtocol {
         return instructionList
     }
 
-    fileprivate func _instructionForBrick(_ brick: Brick) -> [CBInstruction] {
+    private func _instructionForBrick(_ brick: Brick) -> [CBInstruction] {
         // check whether conforms to CBInstructionProtocol (i.e. brick extension)
         guard let instructionBrick = brick as? CBInstructionProtocol else {
             fatalError("All Bricks should implement the CBInstructionProtocol")
@@ -64,7 +64,7 @@ final class CBBackend: CBBackendProtocol {
         return [instructionBrick.instruction()] // actions that have been ported to Swift yet
     }
 
-    fileprivate func _instructionsForIfSequence(_ ifSequence: CBIfConditionalSequence) -> [CBInstruction] {
+    private func _instructionsForIfSequence(_ ifSequence: CBIfConditionalSequence) -> [CBInstruction] {
         var instructionList = [CBInstruction]()
 
         // add if condition evaluation instruction
@@ -102,7 +102,7 @@ final class CBBackend: CBBackendProtocol {
         return instructionList
     }
 
-    fileprivate func _instructionsForLoopSequence(_ loopSequence: CBConditionalSequence) -> [CBInstruction] {
+    private func _instructionsForLoopSequence(_ loopSequence: CBConditionalSequence) -> [CBInstruction] {
         let bodyInstructions = instructionsForSequence(loopSequence.sequenceList)
         let numOfBodyInstructions = bodyInstructions.count
 

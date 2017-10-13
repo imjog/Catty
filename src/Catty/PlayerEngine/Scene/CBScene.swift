@@ -35,16 +35,16 @@ final class CBScene: SKScene {
     let logger: CBLogger?
 
     /// ReplayKit preview view controller used when viewing recorded content.
-    fileprivate var _previewViewController: AnyObject?
+    private var _previewViewController: AnyObject?
     @available(iOS 9.0, *)
     @objc var previewViewController: RPPreviewViewController? {
         get { return _previewViewController as? RPPreviewViewController }
         set { _previewViewController = newValue }
     }
-    fileprivate(set) var scheduler: CBSchedulerProtocol?
-    fileprivate(set) var frontend: CBFrontendProtocol?
-    fileprivate(set) var backend: CBBackendProtocol?
-    fileprivate(set) var broadcastHandler: CBBroadcastHandlerProtocol?
+    private(set) var scheduler: CBSchedulerProtocol?
+    private(set) var frontend: CBFrontendProtocol?
+    private(set) var backend: CBBackendProtocol?
+    private(set) var broadcastHandler: CBBroadcastHandlerProtocol?
     @objc var isScreenRecorderAvailable: Bool {
     return RPScreenRecorder.shared().isAvailable
     

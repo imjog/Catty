@@ -39,7 +39,7 @@ public final class InputValidationResult : NSObject {
     @objc let valid: Bool
     let localizedMessage: String?
     
-    fileprivate init(valid: Bool, localizedMessage: String?) {
+    private init(valid: Bool, localizedMessage: String?) {
         self.valid = valid
         self.localizedMessage = localizedMessage
     }
@@ -66,9 +66,9 @@ public final class InputValidationResult : NSObject {
 
 
 final class TextFieldAlertController : BaseAlertController, TextFieldAlertDefining, TextFieldAlertControllerBuilding, UITextFieldDelegate {
-    fileprivate var characterValidator: ((String) -> Bool)?
-    fileprivate var valueValidator: ((String) -> InputValidationResult)?
-    fileprivate let initialMessage: String?
+    private var characterValidator: ((String) -> Bool)?
+    private var valueValidator: ((String) -> InputValidationResult)?
+    private let initialMessage: String?
     
     init(title: String?, message: String?) {
         initialMessage = message
@@ -110,7 +110,7 @@ final class TextFieldAlertController : BaseAlertController, TextFieldAlertDefini
         return self
     }
     
-    fileprivate func reinputWithMessage(_ message: String, alertController: UIAlertController) {
+    private func reinputWithMessage(_ message: String, alertController: UIAlertController) {
         AlertControllerBuilder.alertWithTitle(kLocalizedPocketCode, message: message)
             .addCancelActionWithTitle(kLocalizedOK, handler: {
                 Util.topmostViewController().present(alertController, animated: true, completion: nil)

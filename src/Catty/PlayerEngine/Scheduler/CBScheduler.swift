@@ -26,20 +26,20 @@ final class CBScheduler: CBSchedulerProtocol {
     var logger: CBLogger
     //    var schedulingAlgorithm: CBSchedulingAlgorithmProtocol?
     var running = false
-    fileprivate let _broadcastHandler: CBBroadcastHandlerProtocol
+    private let _broadcastHandler: CBBroadcastHandlerProtocol
     
-    fileprivate var _spriteNodes = [String:CBSpriteNode]()
-    fileprivate var _contexts = [CBScriptContextProtocol]()
-    fileprivate var _whenContexts = [String:[CBWhenScriptContext]]()
-    fileprivate var _scheduledContexts = OrderedDictionary<String,[CBScriptContextProtocol]>()
-    fileprivate var _contextsWaitingToBeScheduled = OrderedDictionary<String,[CBScriptContextProtocol]>()
-    fileprivate var _hasNewBroadcastContextBeenScheduled = false
+    private var _spriteNodes = [String:CBSpriteNode]()
+    private var _contexts = [CBScriptContextProtocol]()
+    private var _whenContexts = [String:[CBWhenScriptContext]]()
+    private var _scheduledContexts = OrderedDictionary<String,[CBScriptContextProtocol]>()
+    private var _contextsWaitingToBeScheduled = OrderedDictionary<String,[CBScriptContextProtocol]>()
+    private var _hasNewBroadcastContextBeenScheduled = false
     
-    fileprivate var _availableWaitQueues = [DispatchQueue]()
-    fileprivate var _availableBufferQueues = [DispatchQueue]()
-    fileprivate let _lockWaitQueue = DispatchQueue(label: "org.catrobat.LockWaitQueue", attributes: [])
-    fileprivate let _lockBufferQueue = DispatchQueue(label: "org.catrobat.LockBufferQueue", attributes: [])
-    fileprivate var _lastQueueIndex = 0
+    private var _availableWaitQueues = [DispatchQueue]()
+    private var _availableBufferQueues = [DispatchQueue]()
+    private let _lockWaitQueue = DispatchQueue(label: "org.catrobat.LockWaitQueue", attributes: [])
+    private let _lockBufferQueue = DispatchQueue(label: "org.catrobat.LockBufferQueue", attributes: [])
+    private var _lastQueueIndex = 0
     
     // MARK: Static properties
     static let vibrateSerialQueue = OperationQueue()

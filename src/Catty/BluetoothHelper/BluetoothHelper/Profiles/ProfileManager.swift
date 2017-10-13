@@ -29,7 +29,7 @@ open class ProfileManager {
     internal var serviceProfiles = [CBUUID:ServiceProfile]()
     
     // PRIVATE
-    fileprivate init() {
+    private init() {
     }
     
     // PUBLIC

@@ -55,15 +55,15 @@ private let MAX_SENSOR_PIN:Int = 5;
 
 @objc
 class Phiro: FirmataDevice,PhiroProtocol {
-    fileprivate let PHIRO_UUID:CBUUID = CBUUID.init(string: "00001101-0000-1000-8000-00805F9B34FB")
-    fileprivate static let tag:String = "Phiro";
+    private let PHIRO_UUID:CBUUID = CBUUID.init(string: "00001101-0000-1000-8000-00805F9B34FB")
+    private static let tag:String = "Phiro";
     
     override var rxUUID: CBUUID { get { return CBUUID.init(string: "00001101-0000-1000-8000-00805F9B34FB") } }
     override var txUUID: CBUUID { get { return CBUUID.init(string: "00001101-0000-1000-8000-00805F9B34FB") } }
     
     internal let phiroHelper:PhiroHelper = PhiroHelper()
     internal var toneTimer:Timer = Timer()
-    fileprivate var isReportingSensorData = false
+    private var isReportingSensorData = false
     
     // MARK: override
     
@@ -138,13 +138,13 @@ class Phiro: FirmataDevice,PhiroProtocol {
     }
     
     //MARK:Helper
-    @objc fileprivate func cancelTone(){
+    @objc private func cancelTone(){
         self.sendAnalogFirmataMessage(PIN_SPEAKER_OUT, value:0)
         self.toneTimer.invalidate()
         self.toneTimer = Timer()
     }
     
-    fileprivate func percentToSpeed(_ percent:Int) -> Int{
+    private func percentToSpeed(_ percent:Int) -> Int{
         if (percent <= 0) {
             return 0;
         }
@@ -155,7 +155,7 @@ class Phiro: FirmataDevice,PhiroProtocol {
         return (Int) (Double(percent) * 2.55);
     }
     
-    fileprivate func sendAnalogFirmataMessage(_ pin:Int,value:Int){
+    private func sendAnalogFirmataMessage(_ pin:Int,value:Int){
         let analogPin:UInt8 = UInt8(checkValue(pin))
         let checkedValue :UInt8 = UInt8(checkValue(value))
         firmata.writePinMode(.pwm, pin: analogPin)
@@ -182,7 +182,7 @@ class Phiro: FirmataDevice,PhiroProtocol {
             reportAnalogArduinoPin(i,report: report)
         }
     }
-    fileprivate func reportAnalogArduinoPin(_ analogPinNumber:Int,report:Bool) {
+    private func reportAnalogArduinoPin(_ analogPinNumber:Int,report:Bool) {
         let pin: UInt8 = UInt8(checkValue(analogPinNumber))
         self.firmata.writePinMode(.input, pin: pin)
         self.firmata.setAnalogValueReportingforPin(pin, enabled: report)
@@ -194,7 +194,7 @@ class Phiro: FirmataDevice,PhiroProtocol {
         return Double(value)
     }
     
-    fileprivate func getAnalogPin(_ analogPinNumber: Int) -> Double {
+    private func getAnalogPin(_ analogPinNumber: Int) -> Double {
         switch (analogPinNumber) {
         case PIN_SENSOR_FRONT_LEFT:
             return Double(getFrontLeftSensor())
@@ -215,27 +215,27 @@ class Phiro: FirmataDevice,PhiroProtocol {
 
     // MARK: Sensor Values
     
-    fileprivate func getFrontLeftSensor() -> Int {
+    private func getFrontLeftSensor() -> Int {
         return phiroHelper.frontLeftSensor;
     }
     
-    fileprivate func getFrontRightSensor() -> Int {
+    private func getFrontRightSensor() -> Int {
         return phiroHelper.frontRightSensor;
     }
     
-    fileprivate func getSideLeftSensor() -> Int {
+    private func getSideLeftSensor() -> Int {
         return phiroHelper.sideLeftSensor;
     }
     
-    fileprivate func getSideRightSensor() -> Int {
+    private func getSideRightSensor() -> Int {
         return phiroHelper.sideRightSensor;
     }
     
-    fileprivate func getBottomLeftSensor() -> Int {
+    private func getBottomLeftSensor() -> Int {
         return phiroHelper.bottomLeftSensor;
     }
     
-    fileprivate func getBottomRightSensor() -> Int {
+    private func getBottomRightSensor() -> Int {
         return phiroHelper.bottomRightSensor;
     }
     

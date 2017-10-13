@@ -27,7 +27,7 @@ import CoreBluetooth
 public final class Service : ServiceWrapper {
     
     internal var helper = ServiceHelper<Service>()
-    fileprivate let profile         : ServiceProfile?
+    private let profile         : ServiceProfile?
     internal let _peripheral    : Peripheral
     internal let cbService      : CBService
     
@@ -109,7 +109,7 @@ public final class Service : ServiceWrapper {
 //MARK: Service Implementation
 public final class ServiceHelper<S:ServiceWrapper> {
     
-    fileprivate var characteristicsDiscoveredPromise = Promise<S>()
+    private var characteristicsDiscoveredPromise = Promise<S>()
     
     public init() {
     }

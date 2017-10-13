@@ -37,8 +37,8 @@ open class ArduinoHelper {
     
     var portValues = Array(repeating: Array(repeating: 0, count: 8), count: 3)
     //Helper
-    fileprivate var previousDigitalPin:UInt8 = 255;
-    fileprivate var previousAnalogPin:UInt8 = 255;
+    private var previousDigitalPin:UInt8 = 255;
+    private var previousAnalogPin:UInt8 = 255;
     
     func didReceiveAnalogMessage(_ pin:Int,value:Int){
         switch (pin) {

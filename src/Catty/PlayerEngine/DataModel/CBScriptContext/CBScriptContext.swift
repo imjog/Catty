@@ -49,8 +49,8 @@ class CBScriptContext: CBScriptContextProtocol {
     final var count: Int { return _instructionList.count }
     final var index: Int  = 0
 
-    final fileprivate var _instructionPointer: Int = 0
-    final fileprivate lazy var _instructionList = [CBInstruction]()
+    final private var _instructionPointer: Int = 0
+    final private lazy var _instructionList = [CBInstruction]()
 
     // MARK: - Initializers
     convenience init(script: Script, spriteNode: CBSpriteNode) {

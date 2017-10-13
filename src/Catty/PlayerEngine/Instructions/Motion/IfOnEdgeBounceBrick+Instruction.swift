@@ -115,7 +115,7 @@ private let EPSILON = 0.0001
         return false
     }
 
-    fileprivate func normalizeRotation(_ rotation:Double) -> Double {
+    private func normalizeRotation(_ rotation:Double) -> Double {
         var normalizedRotation = rotation
         
         if self.isLess(normalizedRotation, second: 0.0) {
@@ -124,23 +124,23 @@ private let EPSILON = 0.0001
         return normalizedRotation.truncatingRemainder(dividingBy: 360)
     }
     
-    fileprivate func isGreater(_ first:Double, second:Double) -> Bool {
+    private func isGreater(_ first:Double, second:Double) -> Bool {
         return first - second > EPSILON
     }
     
-    fileprivate func isGreaterOrEqual(_ first:Double, second:Double) -> Bool {
+    private func isGreaterOrEqual(_ first:Double, second:Double) -> Bool {
         return first - second > EPSILON || self.isEqual(first, second: second)
     }
     
-    fileprivate func isLess(_ first:Double, second:Double) -> Bool {
+    private func isLess(_ first:Double, second:Double) -> Bool {
         return first - second < EPSILON && !self.isEqual(first, second: second)
     }
     
-    fileprivate func isLessOrEqual(_ first:Double, second:Double) -> Bool {
+    private func isLessOrEqual(_ first:Double, second:Double) -> Bool {
         return first - second < EPSILON || self.isEqual(first, second: second)
     }
     
-    fileprivate func isEqual(_ first:Double, second:Double) -> Bool {
+    private func isEqual(_ first:Double, second:Double) -> Bool {
         return abs(first - second) <= EPSILON
     }
 }

@@ -62,7 +62,7 @@ extension CBScene: RPScreenRecorderDelegate {
         }
     }
 
-    fileprivate func _showScreenRecordingAlert(_ message: String) {
+    private func _showScreenRecordingAlert(_ message: String) {
         // Pause the scene and un-pause after the alert returns.
         isPaused = true
 

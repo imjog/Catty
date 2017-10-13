@@ -26,7 +26,7 @@ class CBConditionalSequence: CBSequenceProtocol, CBSequenceVisitProtocol {
     final weak var rootSequenceList: CBScriptSequenceList?
     final let sequenceList: CBSequenceList
     final var lastLoopIterationStartTime: Date = Date()
-    final fileprivate weak var _conditionBrick: BrickConditionalBranchProtocol!
+    final private weak var _conditionBrick: BrickConditionalBranchProtocol!
 
     // MARK: - Initializers
     init(rootSequenceList: CBScriptSequenceList, conditionBrick: BrickConditionalBranchProtocol, sequenceList: CBSequenceList) {

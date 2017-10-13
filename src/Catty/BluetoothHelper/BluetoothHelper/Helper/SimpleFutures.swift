@@ -485,11 +485,11 @@ open class Promise<T> {
 // Future
 open class Future<T> {
     
-    fileprivate var result:Try<T>?
+    private var result:Try<T>?
     
     internal let defaultExecutionContext: ExecutionContext  = QueueContext.main
     typealias OnComplete                                    = (Try<T>) -> Void
-    fileprivate var saveCompletes                               = [OnComplete]()
+    private var saveCompletes                               = [OnComplete]()
     
     open var completed : Bool {
         return self.result != nil
@@ -921,10 +921,10 @@ open class StreamPromise<T> {
 // FutureStream
 open class FutureStream<T> {
     
-    fileprivate var futures         = [Future<T>]()
-    fileprivate typealias InFuture  = (Future<T>) -> Void
-    fileprivate var saveCompletes   = [InFuture]()
-    fileprivate var capacity        : Int?
+    private var futures         = [Future<T>]()
+    private typealias InFuture  = (Future<T>) -> Void
+    private var saveCompletes   = [InFuture]()
+    private var capacity        : Int?
     
     internal let defaultExecutionContext: ExecutionContext  = QueueContext.main
     

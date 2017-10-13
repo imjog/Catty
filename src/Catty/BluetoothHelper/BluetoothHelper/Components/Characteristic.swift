@@ -220,16 +220,16 @@ public final class Characteristic : CharacteristicWrapper {
 public final class CharacteristicImplementation<C:CharacteristicWrapper> {
     
     public var notificationUpdatePromise          : StreamPromise<C>?
-    fileprivate var notificationStateChangedPromise    = Promise<C>()
-    fileprivate var readPromise                        = Promise<C>()
-    fileprivate var writePromise                       = Promise<C>()
+    private var notificationStateChangedPromise    = Promise<C>()
+    private var readPromise                        = Promise<C>()
+    private var writePromise                       = Promise<C>()
     
-    fileprivate var reading = false
-    fileprivate var writing = false
+    private var reading = false
+    private var writing = false
     
-    fileprivate var readSequence    = 0
-    fileprivate var writeSequence   = 0
-    fileprivate let defaultTimeout  = 10.0
+    private var readSequence    = 0
+    private var writeSequence   = 0
+    private let defaultTimeout  = 10.0
     
     public init() {
     }
@@ -318,7 +318,7 @@ public final class CharacteristicImplementation<C:CharacteristicWrapper> {
         }
         return self.readPromise.future
     }
-    fileprivate func timeoutRead(_ characteristic:C, sequence:Int, timeout:Double) {
+    private func timeoutRead(_ characteristic:C, sequence:Int, timeout:Double) {
         CentralQueue.delay(timeout) {
             if sequence == self.readSequence && self.reading {
                 self.reading = false
@@ -341,7 +341,7 @@ public final class CharacteristicImplementation<C:CharacteristicWrapper> {
         return self.writePromise.future
     }
     
-    fileprivate func timeoutWrite(_ characteristic:C, sequence:Int, timeout:Double) {
+    private func timeoutWrite(_ characteristic:C, sequence:Int, timeout:Double) {
         CentralQueue.delay(timeout) {
             if sequence == self.writeSequence && self.writing {
                 self.writing = false

@@ -150,7 +150,7 @@ class ArduinoDevice:FirmataDevice,ArduinoProtocol,ArduinoPropertyProtocol {
         }
     }
     
-    fileprivate func reportAnalogArduinoPin(_ analogPinNumber:Int,report:Bool) {
+    private func reportAnalogArduinoPin(_ analogPinNumber:Int,report:Bool) {
         let pin: UInt8 = UInt8(checkValue(analogPinNumber))
         if checkAnalogPinCapability(pin, neededMode: .unknown) {
             self.firmata.setAnalogValueReportingforPin(pin, enabled: report)
@@ -191,7 +191,7 @@ class ArduinoDevice:FirmataDevice,ArduinoProtocol,ArduinoPropertyProtocol {
     
     //MARK: Helper
     
-    fileprivate func checkDigitalPinCapability(_ pinNumber:UInt8,neededMode:PinMode) -> Bool {
+    private func checkDigitalPinCapability(_ pinNumber:UInt8,neededMode:PinMode) -> Bool {
         if(pinsArray.count > 0){
             let pinCheck = "D\(pinNumber)"
             for pin:[String:Any] in pinsArray {
@@ -216,7 +216,7 @@ class ArduinoDevice:FirmataDevice,ArduinoProtocol,ArduinoPropertyProtocol {
     }
     
     
-    fileprivate func checkAnalogPinCapability(_ pinNumber:UInt8,neededMode:PinMode) -> Bool {
+    private func checkAnalogPinCapability(_ pinNumber:UInt8,neededMode:PinMode) -> Bool {
         if(pinsArray.count > 0){
             let pinCheck = "A\(pinNumber)"
             for pin:[String:Any] in pinsArray {
@@ -322,7 +322,7 @@ class ArduinoDevice:FirmataDevice,ArduinoProtocol,ArduinoPropertyProtocol {
     
     //MARK: setter/getter
     
-    fileprivate func getAnalogPin0() -> Int {
+    private func getAnalogPin0() -> Int {
         return arduinoHelper.analogPin0;
     }
     

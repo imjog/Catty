@@ -26,11 +26,11 @@ import CoreBluetooth
 //MARK: Central Manager
 @objc open class CentralManager : NSObject, CBCentralManagerDelegate, CMWrapper {
     
-    fileprivate static var instance : CentralManager!
+    private static var instance : CentralManager!
     
     internal let helper = CentralManagerHelper<CentralManager>()
     
-    fileprivate var cbCentralManager : CBCentralManager! = nil
+    private var cbCentralManager : CBCentralManager! = nil
     
     internal var ownPeripherals   = [CBPeripheral: Peripheral]()
     
@@ -49,12 +49,12 @@ import CoreBluetooth
     }
     
     //MARK: init
-    fileprivate override init() {
+    private override init() {
         super.init()
         self.cbCentralManager = CBCentralManager(delegate:self, queue:CentralQueue.queue)
     }
     
-    fileprivate init(options:[String:AnyObject]?) {
+    private init(options:[String:AnyObject]?) {
         super.init()
         self.cbCentralManager = CBCentralManager(delegate:self, queue:CentralQueue.queue, options:options)
     }
@@ -257,13 +257,13 @@ import CoreBluetooth
 open class CentralManagerHelper<CM> where CM:CMWrapper,
                                            CM.PeripheralWrap:PeripheralWrapper {
     
-    fileprivate var afterStartingPromise                 = Promise<Void>()
-    fileprivate var afterStoppingPromise                = Promise<Void>()
+    private var afterStartingPromise                 = Promise<Void>()
+    private var afterStoppingPromise                = Promise<Void>()
     internal var afterPeripheralDiscoveredPromise   = StreamPromise<CM.PeripheralWrap>()
     internal var afterKnownPeripheralDiscoveredPromise   = StreamPromise<[CM.PeripheralWrap]>()
     internal var afterConnectedPeripheralDiscoveredPromise   = StreamPromise<[CM.PeripheralWrap]>()
     
-    fileprivate var _isScanning      = false
+    private var _isScanning      = false
     
     open var isScanning : Bool {
         return self._isScanning

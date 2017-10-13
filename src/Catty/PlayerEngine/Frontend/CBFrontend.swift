@@ -24,8 +24,8 @@ final class CBFrontend: CBFrontendProtocol {
 
     // MARK: - Properties
     let logger: CBLogger
-    fileprivate(set) weak var program: Program?
-    fileprivate lazy var _sequenceFilters = [CBFrontendSequenceFilterProtocol]()
+    private(set) weak var program: Program?
+    private lazy var _sequenceFilters = [CBFrontendSequenceFilterProtocol]()
 
     // MARK: - Initializers
     init(logger: CBLogger, program: Program?) {

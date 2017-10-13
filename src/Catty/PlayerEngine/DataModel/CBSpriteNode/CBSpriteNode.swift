@@ -51,7 +51,7 @@ final class CBSpriteNode: SKSpriteNode {
             return CBSceneHelper.convertSceneToDegrees(Util.radians(toDegree: Double(self.zRotation)))
         }
     }
-    fileprivate var _lastTimeTouchedSpriteNode = [String:Date]()
+    private var _lastTimeTouchedSpriteNode = [String:Date]()
 
     // MARK: Custom getters and setters
     @objc func setPositionForCropping(_ position: CGPoint) {
